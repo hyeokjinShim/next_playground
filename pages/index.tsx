@@ -1,7 +1,8 @@
+import HomePageTemplate from '@/components/templates/HomePageTemplate';
 import {NextPage} from 'next';
 
-const MainPage: NextPage = () => {
-  return <div>MainPage</div>;
+const HomePage: NextPage = () => {
+  return <HomePageTemplate />;
 };
 
-export default MainPage;
+export default HomePage;

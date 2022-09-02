@@ -10,6 +10,7 @@ export interface DoubleSidedCardProps extends GridProps {
   onCardClick?: () => void;
   openAnimation?: CardVariants;
   closeAnimation?: CardVariants;
+  disabled?: boolean;
 }
 
 const openDefaultAnimation: CardVariants = {
@@ -55,6 +56,7 @@ const DoubleSidedCard: FC<DoubleSidedCardProps> = ({
   sx,
   openAnimation = openDefaultAnimation,
   closeAnimation = closeDefaultAnimation,
+  disabled = false,
   ...props
 }) => {
   const defaultControls = !controls ? useAnimation() : controls;
@@ -81,7 +83,7 @@ const DoubleSidedCard: FC<DoubleSidedCardProps> = ({
       initial="closed"
       sx={{
         position: 'relative',
-        cursor: 'pointer',
+        cursor: disabled ? 'initial' : 'pointer',
         ...sx,
       }}
     >

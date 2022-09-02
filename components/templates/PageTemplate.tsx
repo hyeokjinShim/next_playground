@@ -1,11 +1,18 @@
+import {NoSsr} from '@mui/material';
 import React, {FC} from 'react';
+import Header from '@/components/organisms/Header';
 
 interface PageTemplateProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const PageTemplate: FC<PageTemplateProps> = ({children}) => {
-  return <div>{children}</div>;
+  return (
+    <NoSsr>
+      <Header />
+      {children}
+    </NoSsr>
+  );
 };
 
 export default PageTemplate;

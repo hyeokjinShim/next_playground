@@ -1,16 +1,15 @@
 import CardVariants from '@/lib/contexts/animations/cardVariants';
 import {Box, GridProps, styled} from '@mui/material';
 import {useAnimation} from 'framer-motion';
-import React, {FC, useCallback, useEffect, useState} from 'react';
-import DoubleSidedCard, {
-  DoubleSidedCardProps,
-} from '../molecules/DoubleSidedCard';
+import React, {FC, useCallback, useEffect} from 'react';
+import DoubleSidedCard from '../molecules/DoubleSidedCard';
 
 interface GmaeCardProps extends GridProps {
   color: string;
   onClick: () => void;
   isFind: boolean;
   isOpen: boolean;
+  disabled: boolean;
 }
 
 const Card = styled(Box)`
@@ -63,13 +62,15 @@ const GameCard: FC<GmaeCardProps> = ({
   onClick,
   isFind,
   isOpen,
+  disabled,
   ...props
 }) => {
   const controls = useAnimation();
 
   const onCardClick = useCallback(() => {
+    if (disabled) return;
     onClick();
-  }, [onClick]);
+  }, [onClick, disabled]);
 
   useEffect(() => {
     isOpen ? controls.start('open') : controls.start('closed');
@@ -96,6 +97,7 @@ const GameCard: FC<GmaeCardProps> = ({
         visibility: isFind ? 'hidden' : 'visibility',
         transition: 'all 1000ms ease',
       }}
+      disabled={disabled}
       {...props}
     />
   );
