@@ -1,8 +1,14 @@
 import {Grid, styled} from '@mui/material';
 import React, {FC, useCallback, useEffect, useState} from 'react';
+import {GameCardListItem} from '../templates/CardGamePageTemplate';
 import GameCard from './GameCard';
 
-interface GameCardListProps {}
+interface GameCardListProps {
+  onAddScore: () => void;
+  onGameStageClear: () => void;
+  disabled?: boolean;
+  gameCardList: GameCardListItem[];
+}
 
 const Wrap = styled(Grid)`
   width: 100%;
@@ -16,42 +22,12 @@ const Wrap = styled(Grid)`
   align-items: center;
 `;
 
-const colors = [
-  '#B8F3B8',
-  '#B8F3B8',
-  '#FFDDA6',
-  '#FFDDA6',
-  '#A8C8F9',
-  '#A8C8F9',
-  '#CCD1FF',
-  '#CCD1FF',
-  '#FFCCCC',
-  '#FFCCCC',
-  '#FC9EBD',
-  '#FC9EBD',
-  '#EC2A23',
-  '#EC2A23',
-  '#033495',
-  '#033495',
-];
-
-const mixedColors = [...colors].sort(() => 0.5 - Math.random());
-
-const gameCardList = mixedColors.map((color, index) => ({
-  id: `${index}_${color}`,
-  color,
-  isFind: false,
-  isOpen: false,
-}));
-
-interface GameCardListItem {
-  id: string;
-  color: typeof colors[number];
-  isFind: boolean;
-  isOpen: boolean;
-}
-
-const GameCardList: FC<GameCardListProps> = () => {
+const GameCardList: FC<GameCardListProps> = ({
+  gameCardList,
+  onAddScore,
+  onGameStageClear,
+  disabled = false,
+}) => {
   const [cardList, setCardList] = useState<GameCardListItem[]>(gameCardList);
   const [selectedCard, setSelectedCard] = useState<GameCardListItem[]>([]);
 
@@ -77,9 +53,16 @@ const GameCardList: FC<GameCardListProps> = () => {
   );
 
   useEffect(() => {
+    setCardList(gameCardList);
+  }, [gameCardList]);
+
+  useEffect(() => {
     if (selectedCard.length !== 2) return;
 
     const sameCard = selectedCard[0].color === selectedCard[1].color;
+    if (sameCard) {
+      onAddScore();
+    }
     setCardList((prev) =>
       prev.map((cardItem) => {
         if (
@@ -92,7 +75,16 @@ const GameCardList: FC<GameCardListProps> = () => {
       }),
     );
     setSelectedCard([]);
-  }, [selectedCard]);
+  }, [selectedCard, onAddScore]);
+
+  useEffect(() => {
+    if (cardList.length === 0) return;
+    if (cardList.filter((cardItem) => !cardItem.isFind).length === 0) {
+      onGameStageClear();
+      return;
+    }
+  }, [cardList, onGameStageClear]);
+
   return (
     <Wrap>
       {cardList.map((cardItem, index) => (
@@ -104,11 +96,11 @@ const GameCardList: FC<GameCardListProps> = () => {
           }}
           isFind={cardItem.isFind}
           isOpen={cardItem.isOpen}
-          disabled={false}
+          disabled={disabled}
         />
       ))}
     </Wrap>
   );
 };
 
-export default GameCardList;
+export default React.memo(GameCardList);

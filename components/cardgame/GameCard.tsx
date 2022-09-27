@@ -73,17 +73,20 @@ const GameCard: FC<GmaeCardProps> = ({
   }, [onClick, disabled]);
 
   useEffect(() => {
+    if (disabled) return;
     isOpen ? controls.start('open') : controls.start('closed');
-  }, [isOpen]);
+    return;
+  }, [isOpen, disabled]);
 
   useEffect(() => {
+    if (disabled) return;
     controls.start('open');
     const timeFunc = setTimeout(() => {
       controls.start('closed');
     }, 2000);
 
     return () => clearTimeout(timeFunc);
-  }, []);
+  }, [disabled]);
 
   return (
     <DoubleSidedCard
@@ -98,6 +101,7 @@ const GameCard: FC<GmaeCardProps> = ({
         transition: 'all 1000ms ease',
       }}
       disabled={disabled}
+      initial="open"
       {...props}
     />
   );
