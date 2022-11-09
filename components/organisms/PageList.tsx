@@ -30,6 +30,10 @@ const pageList: PageListItem[] = [
         name: 'cardgame',
         url: '/cardgame',
       },
+      {
+        name: 'fullpage',
+        url: '/fullpage',
+      },
     ],
   },
 ];
